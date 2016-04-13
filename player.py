@@ -4,12 +4,10 @@ from block import Block
 
 class Player(Block):
 	
-	def update(self, screen_width):
+	def update(self, screen_width,x_change,y_change):
 		
-		#get the position of the mouse
-		pos = pygame.mouse.get_pos()
-		
-		#set the x and y of the player to where ever the mouse position is
-		self.rect.x = pos[0]
-		self.rect.y = pos[1]
+		self.rect.x += x_change
+		self.rect.y += y_change
+		print(self.rect.x)
+
 		

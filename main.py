@@ -31,6 +31,7 @@ screen = pygame.display.set_mode([screen_width,screen_height])
 block_list = pygame.sprite.Group()
 #used to group all the sprites in the game in one list
 all_sprites_list = pygame.sprite.Group()
+player_list = pygame.sprite.Group()
 
 pygame.display.set_caption("Nom nom")
 
@@ -50,7 +51,7 @@ for i in range (20):
 
 #init the player block and add it to the all_sprites_list
 player = Player(RED,20,15)
-all_sprites_list.add(player)
+player_list.add(player)
 
 # Loop until the user clicks the close button.
 done = False
@@ -60,19 +61,37 @@ clock = pygame.time.Clock()
 score = 0
 # -------- Main Program Loop -----------
 while not done:
+	
+	x_change = 0
+	y_change = 0
+	
 # --- Main event loop
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
-		elif event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_ESCAPE:
-				print("User quit detected. Closing")
-				pygame.quit()
+			
+		if event.type == pygame.KEYDOWN:
+			
+			if event.key == pygame.K_LEFT:
+				x_change = -5
+			elif event.key == pygame.K_RIGHT:
+				x_change = 5
+			elif event.key == pygame.K_UP:
+				y_change = -5
+			elif event.key == pygame.K_DOWN:
+				y_change = 5
+				
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				x_change = 0
+			elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+				y_change = 0
 	screen.fill(WHITE)
     # --- Game logic should go here
     
     #calls the update function on all the sprites in the sprite list
 	all_sprites_list.update(screen_width)
+	player.update(screen_width,x_change,y_change)
 	
 	#see if the player block has collided with anything. if True is set then it removes the sprite. If set Flase it doesn't
 	blocks_hit_list = pygame.sprite.spritecollide(player,block_list, False)
@@ -93,10 +112,11 @@ while not done:
 
     # --- Drawing code should go here
 	all_sprites_list.draw(screen)
+	player_list.draw(screen)
     # --- Go ahead and update the screen with what we've drawn.
 	pygame.display.flip()
 
-    # --- Limit to 60 frames per second
+    # --- Limit to 30 frames per second
 	clock.tick(30)
  
 # Close the window and quit.
