@@ -28,3 +28,4 @@ class Block(pygame.sprite.Sprite):
 		
 		if self.rect.y > 410:
 			self.reset_pos(screen_width)
+			

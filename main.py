@@ -14,6 +14,7 @@ import pygame
 import random
 from block import Block
 from player import Player 
+from bullet import Bullet
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -32,6 +33,7 @@ block_list = pygame.sprite.Group()
 #used to group all the sprites in the game in one list
 all_sprites_list = pygame.sprite.Group()
 player_list = pygame.sprite.Group()
+bullet_list = pygame.sprite.Group()
 
 pygame.display.set_caption("Nom nom")
 
@@ -52,6 +54,8 @@ for i in range (20):
 #init the player block and add it to the all_sprites_list
 player = Player(RED,20,15)
 player_list.add(player)
+bullet = Bullet((250,250,250), 1,1)
+
 
 # Loop until the user clicks the close button.
 done = False
@@ -59,11 +63,11 @@ done = False
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 score = 0
+x_change = 0
+y_change =0
 # -------- Main Program Loop -----------
 while not done:
-	
-	x_change = 0
-	y_change = 0
+
 	
 # --- Main event loop
 	for event in pygame.event.get():
@@ -80,7 +84,12 @@ while not done:
 				y_change = -5
 			elif event.key == pygame.K_DOWN:
 				y_change = 5
-				
+			elif event.key == pygame.K_SPACE:
+				bullet = Bullet(GREEN, 10,10)
+				bullet.rect.x = player.rect.x
+				bullet.rect.y = player.rect.y
+				all_sprites_list.add(bullet)
+				bullet_list.add(bullet)
 		if event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
 				x_change = 0
@@ -95,12 +104,17 @@ while not done:
 	
 	#see if the player block has collided with anything. if True is set then it removes the sprite. If set Flase it doesn't
 	blocks_hit_list = pygame.sprite.spritecollide(player,block_list, False)
+	bullet_hit_list = pygame.sprite.spritecollide(bullet,block_list, True)
 	
 	#every time a block on block_hit_list add 1 to the current score
 	for block in blocks_hit_list:
 		score += 1
 		print(score)
 		#when the block is gone 
+		block.reset_pos(screen_width)
+		
+	for block in bullet_hit_list:
+		print("Colision detected")
 		block.reset_pos(screen_width)
     # --- Screen-clearing code goes here
 
