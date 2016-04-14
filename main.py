@@ -20,6 +20,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+YELLOW = (255,255,0)
  
 pygame.init()
  
@@ -27,6 +28,8 @@ pygame.init()
 screen_width = 700
 screen_height = 400
 screen = pygame.display.set_mode([screen_width,screen_height])
+
+background_image = pygame.image.load('background.jpg')
 
 #used to group all the block sprites in one list
 block_list = pygame.sprite.Group()
@@ -46,7 +49,7 @@ def create_blocks():
 	number_of_blocks = 20
 	for i in range (number_of_blocks):
 		#make a block with the color black and set its width and height
-		block = Block(BLACK, 20,15)
+		block = Block(GREEN, 20,15)
 		
 		#set a random location for the block's x and y cords
 		block.rect.x = random.randrange(screen_width)
@@ -92,7 +95,7 @@ while not done:
 			elif event.key == pygame.K_DOWN:
 				y_change = 5
 			elif event.key == pygame.K_SPACE:
-				bullet = Bullet(GREEN, 10,10)
+				bullet = Bullet(YELLOW, 10,10)
 				bullet.rect.x = player.rect.x
 				bullet.rect.y = player.rect.y
 				all_sprites_list.add(bullet)
@@ -135,6 +138,7 @@ while not done:
     # background image.
 
     # --- Drawing code should go here
+	screen.blit(background_image,(0,0))
 	all_sprites_list.draw(screen)
 	player_list.draw(screen)
     # --- Go ahead and update the screen with what we've drawn.
