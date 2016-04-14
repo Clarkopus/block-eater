@@ -10,4 +10,7 @@ class Player(Block):
 		self.rect.y += y_change
 		print(self.rect.x)
 
+	def reset_pos(self,screen_width):
 		
+		self.rect.y = 200
+		self.rect.x = 350

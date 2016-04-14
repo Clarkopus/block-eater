@@ -36,19 +36,25 @@ player_list = pygame.sprite.Group()
 bullet_list = pygame.sprite.Group()
 
 pygame.display.set_caption("Nom nom")
+number_of_blocks = 20
+
 
 #used to create x amount of blocks
-for i in range (20):
-	#make a block with the color black and set its width and height
-	block = Block(BLACK, 20,15)
+def create_blocks():
 	
-	#set a random location for the block's x and y cords
-	block.rect.x = random.randrange(screen_width)
-	block.rect.y = random.randrange(screen_height)
-	
-	#add the block to both the block list and the sprite list
-	block_list.add(block)
-	all_sprites_list.add(block)
+	print("respawning blocks")
+	number_of_blocks = 20
+	for i in range (number_of_blocks):
+		#make a block with the color black and set its width and height
+		block = Block(BLACK, 20,15)
+		
+		#set a random location for the block's x and y cords
+		block.rect.x = random.randrange(screen_width)
+		block.rect.y = random.randrange(screen_height)
+		
+		#add the block to both the block list and the sprite list
+		block_list.add(block)
+		all_sprites_list.add(block)
 
 
 #init the player block and add it to the all_sprites_list
@@ -65,6 +71,7 @@ clock = pygame.time.Clock()
 score = 0
 x_change = 0
 y_change =0
+create_blocks()
 # -------- Main Program Loop -----------
 while not done:
 
@@ -104,18 +111,21 @@ while not done:
 	
 	#see if the player block has collided with anything. if True is set then it removes the sprite. If set Flase it doesn't
 	blocks_hit_list = pygame.sprite.spritecollide(player,block_list, False)
+	#See if the bullet has collided with anything
 	bullet_hit_list = pygame.sprite.spritecollide(bullet,block_list, True)
 	
 	#every time a block on block_hit_list add 1 to the current score
+	
 	for block in blocks_hit_list:
-		score += 1
-		print(score)
-		#when the block is gone 
-		block.reset_pos(screen_width)
+		player.reset_pos(screen_width)	
 		
+	#every time a block in bullet_hit_list shows up, reset the position of the blocks.
 	for block in bullet_hit_list:
 		print("Colision detected")
+		number_of_blocks -= 1
 		block.reset_pos(screen_width)
+		if number_of_blocks == 0:
+			create_blocks()
     # --- Screen-clearing code goes here
 
     # Here, we clear the screen to white. Don't put other drawing commands
