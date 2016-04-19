@@ -83,7 +83,7 @@ while not done:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
-			
+		#Used to track keyboard inputs and turn it into movement
 		if event.type == pygame.KEYDOWN:
 			
 			if event.key == pygame.K_LEFT:
